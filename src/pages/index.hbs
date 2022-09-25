@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    
+    <meta charset="utf-8" />
+    <link rel="icon" href="https://glitch.com/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>{{seo.title}}</title>
+    
+    <!-- Meta tags for SEO and social sharing -->
+    <link rel="canonical" href="{{seo.url}}">
+    <meta name="description" content="{{seo.description}}">
+    <meta property="og:title" content="{{seo.title}}">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="{{seo.url}}">
+    <meta property="og:description" content="{{seo.description}}">
+    <meta property="og:image" content="{{seo.image}}">
+    <meta name="twitter:card" content="summary">
+
+    <!-- Import the webpage's stylesheet -->
+    <link rel="stylesheet" href="/style.css" />
+
+    <!-- This is a handlebars IF statement
+         Checking for a custom "color" parameter from server.js -->
+     </head>
+  <body>
+    <div class="wrapper">
+      <div class="content" role="main">
+        
+        <!-- This is the start of content for our page -->
+        <h1 class="title">Stable Diffusion NFT Minter with NFTPort</h1>
+        
+        <!-- check if an image article has been processed -->
+        
+        {{#if mintedurl}}
+        <p>       
+        Check transaction on Polygon <a href="{{mintedurl}}">here</a>!
+        </p>
+        <p>
+        Thank you, NFTPort!
+        </p>
+        {{/if}}  
+
+        {{#if success}}
+        <h2>
+          Looks good! Block was signed at {{blocksigned}}!
+        </h2> 
+        {{/if}}  
+        
+        {{#if status}}
+        <h2>
+          Error in processing or taking too long.
+        </h2> 
+        {{/if}}  
+
+        {{#if article}}
+          <h2>
+            Here is your result! You can mint it as an NFT on Polygon below!  
+          </h2>
+          <h3>
+          Prompt: "{{title}}"            
+          </h3>
+          <img src="{{article}}" />
+          
+        
+          <div class="color-form">
+          
+          <!-- form for minting -->
+          <form class="color-search" method="post">
+              <label for="mint">
+                
+                <input id="url" type="hidden" name="url" value="{{article}}"><br />
+                Name: <input id="name" name="name" required="required" type="text" size="100" maxlength="399" value="{{title}}"><br />
+                Description: <input id="description" name="description" required="required" size="100" maxlength="1999" type="textarea" value="Stable Diffusion image with prompt: {{title}}"><br />
+                Wallet: <input id="wallet" name="wallet" required="required" size="60" type="text"><br />
+
+              </label>
+            
+            <!-- If the user submits a value through the form 
+                 it'll be passed to the server in the request body  -->
+            <button type="submit">Mint on Polygon</button>
+          </form>
+        
+                {{/if}}  
+        
+        </div>   
+     
+        
+        <div class="color-form">
+          <!-- This form makes a prompt for stable diffusion -->
+          <form class="color-search" method="post">
+              <label for="color">
+                
+                <!-- We use the handlebars "#if" statement so the form can adapt to its situation -->
+                {{#if article}}
+                  Enter another prompt?<br>
+                {{else}}
+                  Enter a prompt for Stable Diffusion<br>
+                {{/if}}
+                <input id="prompt" name="prompt" required="required" type="text">
+              </label>
+            
+            <!-- If the user submits a value through the form 
+                 it'll be passed to the server in the request body  -->
+            <button type="submit">Submit</button>
+          </form>
+          
+        </div>
+        
+        
+        <div class="color-form">
+          <!-- This form makes a prompt for stable diffusion -->
+          <form class="color-search" method="post">                
+            Check Polygon transaction ID using <a href="https://www.covalenthq.com/">Covalent</a>:<br />
+            
+            <input id="transaction" name="transaction" value="{{mintedhash}}" required="required" type="text">
+           
+            <!-- If the user submits a value through the form 
+                 it'll be passed to the server in the request body  -->
+            <button type="submit">Submit</button>
+          </form>
+          
+        </div>
+        
+        <div class="illo-container">
+          <img src="https://cdn.glitch.com/c62efef6-1e75-45cf-b248-afeccdda9477%2Fillustration.svg?v=1618196069568" class="illustration" alt="Node logo" />
+        </div>
+        
+        <!-- Instructions on using this project -->
+        <div class="instructions">
+          <h2>
+            Using this project
+          </h2>
+          <p>
+            This is a Glitch project. You can
+            use it to build your own app. Check out README.md in the editor for
+            more info and next steps you can take!
+          </p>
+        </div>
+        
+      </div>
+    </div>
+    <!-- The footer holds our remix button — you can use it for structure or cut it out ✂ -->
+    <footer class="footer">
+      <div class="links"></div>
+      <a
+        class="btn--remix"
+        target="_top"
+        href="https://glitch.com/edit/#!/remix/glitch-hello-node"
+      >
+        <img
+          src="https://cdn.glitch.com/605e2a51-d45f-4d87-a285-9410ad350515%2FLogo_Color.svg?v=1618199565140"
+          alt=""
+        />
+        Remix on Glitch
+      </a>
+    </footer>
+  </body>
+</html>
