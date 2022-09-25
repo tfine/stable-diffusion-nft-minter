@@ -43,21 +43,18 @@ if (seo.url === "glitch-default") {
 fastify.get("/", async function (request, reply) {
   // params is an object we'll pass to our handlebars template
   let params = { seo: seo };
-  
+
   // The Handlebars code will be able to access the parameter values and build them into the page
   return reply.view("/src/pages/index.hbs", params);
-  
-  
 });
 
 /**
  * Our POST route to handle and react to form submissions
  */
 fastify.post("/", async function (request, reply) {
-
   // define async function for minting
-  
-    let transactioncheck = async function postData(url) {
+
+  let transactioncheck = async function postData(url) {
     // Default options are marked with *
     const response = await fetch(url, {
       method: "GET", // *GET, POST, PUT, DELETE, etc.
@@ -74,20 +71,23 @@ fastify.post("/", async function (request, reply) {
     });
     return response.json();
   };
-  
+
   if (request.body.transaction) {
-  var urlcheck = "https://api.covalenthq.com/v1/137/transaction_v2/" + request.body.transaction + "/?&key=" + process.env.COVALENT;
-  var transactionstatus = await transactioncheck(urlcheck); 
-  console.log(transactionstatus["data"]["items"][0]["successful"]);
-  let params = {
+    var urlcheck =
+      "https://api.covalenthq.com/v1/137/transaction_v2/" +
+      request.body.transaction +
+      "/?&key=" +
+      process.env.COVALENT;
+    var transactionstatus = await transactioncheck(urlcheck);
+    console.log(transactionstatus["data"]["items"][0]["successful"]);
+    let params = {
       success: transactionstatus["data"]["items"][0]["successful"],
-      blocksigned: transactionstatus["data"]["items"][0]["block_signed_at"]
-  };
-  // show page with new data
-  return reply.view("/src/pages/index.hbs", params);
+      blocksigned: transactionstatus["data"]["items"][0]["block_signed_at"],
+    };
+    // show page with new data
+    return reply.view("/src/pages/index.hbs", params);
   }
-    
-  
+
   let mint = async function postData(url, data) {
     // Default options are marked with *
     const response = await fetch(url, {
@@ -122,22 +122,19 @@ fastify.post("/", async function (request, reply) {
       mint_to_address: `${wallet}`,
     });
     console.log(minted);
-    if (`${minted["response"]}` == 'OK')
-    {
-      
-    
-    let params = {
-      mintedhash: `${minted["transaction_hash"]}`,
-      mintedurl: `${minted["transaction_external_url"]}`,
-      minteddescription: `${minted["description"]}`,
-      mintedtitle: `${minted["name"]}`,
-      mintedfile: `${urladdress}`,
-      mintedaddress: `${minted["transaction_external_url"]}`
+    if (`${minted["response"]}` == "OK") {
+      let params = {
+        mintedhash: `${minted["transaction_hash"]}`,
+        mintedurl: `${minted["transaction_external_url"]}`,
+        minteddescription: `${minted["description"]}`,
+        mintedtitle: `${minted["name"]}`,
+        mintedfile: `${urladdress}`,
+        mintedaddress: `${minted["transaction_external_url"]}`,
+      };
+      // show page with new data
+      return reply.view("/src/pages/index.hbs", params);
     }
-    // show page with new data
-    return reply.view("/src/pages/index.hbs", params);
-  }
-  }// else do stable diffusion
+  } // else do stable diffusion
   else {
     console.log("new process for:");
     let label = request.body.prompt;
@@ -183,11 +180,14 @@ fastify.post("/", async function (request, reply) {
     };
 
     console.log("REQUEST IMAGE");
-    let firstrequestresult = await firstrequest("https://api.replicate.com/v1/predictions", {
-      version:
-        "a9758cbfbd5f3c2094457d996681af52552901775aa2d6dd0b17fd15df959bef",
-      input: { prompt: `${label}`, num_inference_steps: "70" },
-    });
+    let firstrequestresult = await firstrequest(
+      "https://api.replicate.com/v1/predictions",
+      {
+        version:
+          "a9758cbfbd5f3c2094457d996681af52552901775aa2d6dd0b17fd15df959bef",
+        input: { prompt: `${label}`, num_inference_steps: "70" },
+      }
+    );
 
     console.log("CHECK POSTED URL");
     let url2 = await firstrequestresult["urls"]["get"];
@@ -205,7 +205,7 @@ fastify.post("/", async function (request, reply) {
     if (secondrequestresult["status"] !== "succeeded") {
       console.log("not ready");
       let params = {
-      status: "not ready",
+        status: "not ready",
       };
       return reply.view("/src/pages/index.hbs", params);
     }
