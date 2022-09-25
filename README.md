@@ -1,7 +1,7 @@
 # stable-diffusion-nft-minter
 Webapp to make Stable Diffussion images and mint them on Polygon easily using NFTPort
 
-The project is based on pure Fastify in Node.JS, without any additional dynamic web framework. In the ENV file, there are API keys for Replicate, NFTPort, and Covalent.
+The project is based on pure Fastify in Node.JS, without any additional dynamic web framework. In the ENV file, there need to be API keys for Replicate, NFTPort, and Covalent. They are hard-coded as: REPLICATE, NFTPORT, and COVALENT.
 
 Using HTML forms, the user picks a label for a Stable Diffusion image. Right now, it just uses default settings and gives the process around 10 seconds to run. (However, it would be nice in the future to give the user full control of the Stable Diffusion instance). The app uses the Replicate compute-as-a-service API protocol to run Stable Diffusion.
 
